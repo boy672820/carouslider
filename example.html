@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+	<title>Carouslider Example</title>
+
+	<style>
+	.container {
+		width: 200px;
+		margin: 0 auto;
+	}
+	.list {
+		width: 200px;
+		height: 200px;
+	}
+	.item {
+		width: 200px;
+		height: 200px;
+	}
+	</style>
+</head>
+<body>
+
+
+	<div class="container">
+		<ul class="list">
+			<li class="item">Lorem ipsum dolor sit amet
+				<h3>01</h3>
+			</li>
+			<li class="item">Lorem ipsum dolor sit amet
+				<h3>02</h3>
+			</li>
+			<li class="item">Lorem ipsum dolor sit amet
+				<h3>03</h3>
+			</li>
+			<li class="item">Lorem ipsum dolor sit amet
+				<h3>04</h3>
+			</li>
+			<li class="item">Lorem ipsum dolor sit amet
+				<h3>05</h3>
+			</li>
+			<li class="item">Lorem ipsum dolor sit amet
+				<h3>06</h3>
+			</li>
+		</ul>
+	</div>
+
+	<div class="container">
+		<button type="button" class="left">left</button>
+		<button type="button" class="right">right</button>
+	</div>
+
+	<div class="container">
+		<button type="button" class="stop">stop</button>
+	</div>
+
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	<script src="./carouslider.js"></script>
+	<script>
+
+		var $list = $( '.list' );
+
+		function getRandomColor() {
+			var letters = '0123456789ABCDEF';
+			var color = '#';
+			for (var i = 0; i < 6; i++) {
+				color += letters[Math.floor(Math.random() * 16)];
+			}
+			return color;
+		}
+
+		$list.children( '.item' ).each( function () {
+			$( this ).css( 'background-color', getRandomColor() );
+		} );
+
+		$list.carouslider();
+
+		$( '.left' ).click( function () {
+			$.carousliderLeft();
+		} );
+
+		$( '.right' ).click( function () {
+			$.carousliderRight();
+		} );
+
+		$( '.stop' ).click( function () {
+			$.carousliderStop();
+		} );
+
+	</script>
+
+</body>
+</html>
