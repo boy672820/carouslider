@@ -9,7 +9,7 @@
 		$items,
 		attr = {
 			location: 'left',
-			loop: 6000
+			loop: 1000
 		};
 
 
@@ -31,10 +31,16 @@
 		timer = setInterval( function () {
 			var next_index = index + increase;
 
-			if ( is_left )
+			console.log( is_left );
+
+			if ( is_left ) {
 				if ( next_index > item_max ) next_index = 0;
-			else if
-				( next_index < 0 ) next_index = item_max;
+			}
+			else  {
+				if ( next_index < 0 ) next_index = item_max;
+			}
+
+			console.log( next_index, index );
 
 			var $ItemsMove = $items.filter( ':eq(' + next_index + '), :eq(' + index + ')' ),
 					$nextItem = $items.eq( next_index );
@@ -46,10 +52,12 @@
 			}, 1000 );
 
 			index += increase;
-			if ( is_left )
+			if ( is_left ) {
 				if ( index > item_max ) index = 0;
-			else
+			}
+			else {
 				if ( index < 0 ) index = item_max;
+			}
 
 		}, attr.loop );
 
@@ -73,7 +81,7 @@
 			padding: 0,
 			position: 'relative',
 			listStyle: 'none',
-			overflow: 'hidden'
+			// overflow: 'hidden'
 		} );
 
 		$items.css( {
