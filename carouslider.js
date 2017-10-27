@@ -3,63 +3,70 @@
 	'use strict';
 
 
-	// Global variables
 	var timer = null,
-		index = 0,
-		$items,
-		attr = {
+		attribute = {
 			location: 'left',
-			loop: 1000
-		};
+			loop: 3000
+		},
+		$slider;
 
+
+	var init = function () {
+		var $ul = $slider.children( 'ul' ),
+			$li = $ul.children( 'li' );
+
+		$slider.css( {
+			border: '1px solid red',
+			// overflow: 'hidden'
+		} );
+
+		$ul.css( {
+
+			width: function () {
+				var container_width = 0;
+
+				$li.each( function () {
+					container_width += $( this ).width();
+				} );
+
+				return container_width;
+			},
+			padding: 0,
+			top: 0,
+			left: 0,
+			listStyle: 'none'
+
+		} );
+
+		$li.css( {
+			float: 'left'
+		} );
+
+	};
 
 	/**
 	 * Run slide.
 	 */
 	var run = function () {
 
-		var increase;
+		var $ul = $slider.children( 'ul' ),
+			li_width = $ul.children( 'li' ).width(),
+			li_left = li_width * -1;
 
-		if ( attr.location === 'right' ) increase = -1;
-		else if ( attr.location === 'left' ) increase = 1;
-		else return;
-
-		var container_width = $items.parent().width(),
-			item_max = $items.size() - 1,
-			is_left = increase > 0;
+		// Ready to the first slide
+		$ul.css( 'margin-left', li_left );
+		$ul.children( 'li' ).filter( ':first' ).before( $ul.children( 'li' ).filter( ':last' ) );
 
 		timer = setInterval( function () {
-			var next_index = index + increase;
 
-			console.log( is_left );
-
-			if ( is_left ) {
-				if ( next_index > item_max ) next_index = 0;
+			if ( attribute.location === 'left' ) {
+				$.carousliderLeft();
 			}
-			else  {
-				if ( next_index < 0 ) next_index = item_max;
+			else if ( attribute.location === 'right' ) {
+				$.carousliderRight();
 			}
 
-			console.log( next_index, index );
-
-			var $ItemsMove = $items.filter( ':eq(' + next_index + '), :eq(' + index + ')' ),
-					$nextItem = $items.eq( next_index );
-
-			$nextItem.css( 'left', container_width * increase );
-
-			$ItemsMove.animate( {
-				left: is_left ? '-=' + container_width + 'px' : '+=' + container_width + 'px'
-			}, 1000 );
-
-			index += increase;
-			if ( is_left ) {
-				if ( index > item_max ) index = 0;
-			}
-			else {
-				if ( index < 0 ) index = item_max;
-			}
-
-		}, attr.loop );
+		}, attribute.loop );
 
 	};
 
@@ -67,34 +74,24 @@
 	 * Stop slide.
 	 */
 	var stop = function () {
+
 		clearInterval( timer );
+
 		timer = null;
+
 	};
 
 	/**
-	 * Init slide style.
+	 * Start slide.
 	 */
-	var init = function ( $this ) {
-		var $items = $this.children( 'li' );
+	var start = function () {
 
-		$this.css( {
-			padding: 0,
-			position: 'relative',
-			listStyle: 'none',
-			// overflow: 'hidden'
-		} );
+		timer = setInterval( function () {
 
-		$items.css( {
-			top: 0,
-			left: 0,
-			position: 'absolute'
-		} );
+			$.carousliderLeft();
 
-		$items.each( function () {
-			$( this ).css( 'left', $( this ).width() );
-		} );
+		}, attribute.loop );
 
-		$items.eq( 0 ).css( 'left', 0 );
 	};
 
 
@@ -102,32 +99,62 @@
 	 * jQuery plugins
 	 */
 
-	$.fn.carouslider = function ( attribute ) {
+	$.fn.carouslider = function ( attr ) {
 
-		attr = typeof attribute === 'undefined' ? attr : attribute;
-		$items = this.children( 'li' );
+		$slider = this;
+		attribute = attr || attribute;
 
-		init( this );
-
+		init();
 		run();
+
 	};
 
+	$.carousliderStart = function () {
+		start();
+	};
 
 	$.carousliderStop = function () {
 		stop();
 	};
 
-
 	$.carousliderLeft = function () {
-		attr.location = 'left';
-		stop();
-		run();
+		var $ul = $slider.children( 'ul' ),
+			li_width = $ul.children( 'li' ).width(),
+			li_left = li_width * -1;
+
+		var left_indent = parseInt( $ul.css( 'margin-left' ) ) - li_width;
+
+		$ul.animate(
+			{
+				'margin-left': left_indent
+			},
+			500,
+			function () {
+				// Ready to the next slide
+				$ul.children( 'li' ).filter( ':last' ).after( $ul.children( 'li' ).filter( ':first' ) );
+				$ul.css( 'margin-left', li_left );
+			}
+		);
 	};
 
 	$.carousliderRight = function () {
-		attr.location = 'right';
-		stop();
-		run();
+		var $ul = $slider.children( 'ul' ),
+			li_width = $ul.children( 'li' ).width(),
+			li_left = li_width * -1;
+
+		var left_indent = parseInt( $ul.css( 'margin-left' ) ) + li_width;
+
+		$ul.animate(
+			{
+				'margin-left': left_indent
+			},
+			500,
+			function () {
+				// Ready to the next slide
+				$ul.children( 'li' ).filter( ':first' ).before( $ul.children( 'li' ).filter( ':last' ) );
+				$ul.css( 'margin-left', li_left );
+			}
+		);
 	};
 
 } )( jQuery );

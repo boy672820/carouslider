@@ -12,10 +12,6 @@
 		width: 200px;
 		margin: 0 auto;
 	}
-	.list {
-		width: 200px;
-		height: 200px;
-	}
 	.item {
 		width: 200px;
 		height: 200px;
@@ -25,7 +21,7 @@
 <body>
 
 
-	<div class="container">
+	<div class="container slider">
 		<ul class="list">
 			<li class="item">Lorem ipsum dolor sit amet
 				<h3>01</h3>
@@ -54,6 +50,7 @@
 	</div>
 
 	<div class="container">
+		<button type="button" class="start">start</button>
 		<button type="button" class="stop">stop</button>
 	</div>
 
@@ -61,8 +58,6 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 	<script src="./carouslider.js"></script>
 	<script>
-
-		var $list = $( '.list' );
 
 		function getRandomColor() {
 			var letters = '0123456789ABCDEF';
@@ -73,11 +68,13 @@
 			return color;
 		}
 
+		var $list = $( '.list' );
+
 		$list.children( '.item' ).each( function () {
 			$( this ).css( 'background-color', getRandomColor() );
 		} );
 
-		$list.carouslider();
+		$( '.slider' ).carouslider();
 
 		$( '.left' ).click( function () {
 			$.carousliderLeft();
@@ -85,6 +82,10 @@
 
 		$( '.right' ).click( function () {
 			$.carousliderRight();
+		} );
+
+		$( '.start' ).click( function () {
+			$.carousliderStart();
 		} );
 
 		$( '.stop' ).click( function () {
