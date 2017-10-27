@@ -17,7 +17,7 @@
 
 		$slider.css( {
 			border: '1px solid red',
-			// overflow: 'hidden'
+			overflow: 'hidden'
 		} );
 
 		$ul.css( {
